@@ -60,10 +60,8 @@ class CashCalculator(Calculator):
             return f'На сегодня осталось {can_spend} {currency_rate}'
 
         not_can_spend = round(stat_rate - stat_limit, 2)
-        return (
-                'Денег нет, держись: твой '
-                f'долг - {not_can_spend} {currency_rate}'
-            )
+        return ('Денег нет, держись: твой '
+                f'долг - {not_can_spend} {currency_rate}')
 
 
 class CaloriesCalculator(Calculator):
