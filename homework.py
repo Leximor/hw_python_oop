@@ -29,7 +29,7 @@ class Calculator:
         return sum(week_date.amount for week_date in self.records
                    if amount_for_7_days <= week_date.date <= today)
 
-    def ostatok_na_day(self):
+    def today_remained(self):
         return self.limit - self.get_today_stats()
 
 
@@ -39,8 +39,8 @@ class CashCalculator(Calculator):
     RUB_RATE = 1.00
 
     def get_today_cash_remained(self, currency):
-        ost_day_cash = self.ostatok_na_day()
-        if ost_day_cash == 0:
+        day_cash = self.today_remained()
+        if day_cash == 0:
             return 'Денег нет, держись'
 
         dict_rate = {
@@ -55,21 +55,20 @@ class CashCalculator(Calculator):
         stat_today = self.get_today_stats()
         stat_rate = stat_today / currency_name
         stat_limit = self.limit / currency_name
-        diff_limit_rate = stat_limit - stat_rate
+        diff_limit_rate = round(stat_limit - stat_rate, 2)
         if self.limit > stat_today:
-            can_spend = round(diff_limit_rate, 2)
-            return f'На сегодня осталось {can_spend} {currency_rate}'
+            return f'На сегодня осталось {diff_limit_rate} {currency_rate}'
 
-        not_can_spend = round(-diff_limit_rate, 2)
+        not_can_spend = abs(diff_limit_rate)
         return ('Денег нет, держись: твой '
                 f'долг - {not_can_spend} {currency_rate}')
 
 
 class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
-        calories_ostatok_na_day = self.ostatok_na_day()
-        if calories_ostatok_na_day > 0:
+        calories_today_remained = self.today_remained()
+        if calories_today_remained > 0:
             return ('Сегодня можно съесть что-нибудь ещё, '
                     'но с общей калорийностью не более '
-                    f'{calories_ostatok_na_day} кКал')
+                    f'{calories_today_remained} кКал')
         return 'Хватит есть!'
